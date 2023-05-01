@@ -1,9 +1,9 @@
 const express = require('express')
 const cors = require('cors')
-const nodemailer = require("nodemailer");
+
 
 const app = express()
-const { MongoClient, ServerApiVersion, ObjectId} = require('mongodb');
+const { MongoClient, ObjectId} = require('mongodb');
 
 
 
