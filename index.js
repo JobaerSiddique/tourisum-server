@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-
+const nodemailer = require("nodemailer");
 
 const app = express()
 const { MongoClient, ServerApiVersion, ObjectId} = require('mongodb');
@@ -33,7 +33,33 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const offerCollection= client.db('tours').collection("offerInfo")
 const bookingsCollection = client.db('tours').collection("bookings")
 const paymentCollecetion =client.db('tours').collection("payment")
+const usersCollecetion =client.db('tours').collection("users")
+function sendEmail(bookings){
+ const {email} = bookings
 
+let transporter = nodemailer.createTransport({
+   host: 'smtp.sendgrid.net',
+   port: 587,
+   auth: {
+       user: "apikey",
+       pass: process.env.SendGrid_api_key
+   }
+})
+
+transporter.sendMail({
+  from: "jobaersiddique@gmail.com", // verified sender email
+  to: 'jobaerit.studio@gmail.com', // recipient email
+  subject: "Test message subject", // Subject line
+  text: "Hello world!", // plain text body
+  html: "<b>Hello world!</b>", // html body
+}, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
+}
 async function run() {
     try {
       
@@ -158,6 +184,7 @@ async function run() {
     app.post('/bookings',async(req,res)=>{
       const bookings = req.body;
       const result = await bookingsCollection.insertOne(bookings)
+      sendEmail(bookings)
       res.send(result)
     })
     // get bookings
@@ -177,10 +204,16 @@ async function run() {
         res.send(data)
        }
        app.get('/bookings/:id', async(req,res)=>{
-        const id = req.params.id;
+        
+        const id = req.params.id.trim()
+        
         const query = { _id: ObjectId(id)}
-          const result = await bookingsCollection.findOne(query)
-          res.send(result)
+       const result = await bookingsCollection.findOne(query)
+        res.send(result)
+        
+       
+        
+          
        })
       //  delete operation bookings
       app.delete('/bookings/:id',async(req,res)=>{
@@ -201,7 +234,12 @@ async function run() {
 
     // ssl commerez
     //sslcommerz init
-
+    app.post('/users',async(req,res)=>{
+      const user = req.body;
+      console.log(user)
+      const filter = await usersCollecetion.insertOne(user)
+      res.send(filter)
+    })
 
  
           
