@@ -34,32 +34,9 @@ const offerCollection= client.db('tours').collection("offerInfo")
 const bookingsCollection = client.db('tours').collection("bookings")
 const paymentCollecetion =client.db('tours').collection("payment")
 const usersCollecetion =client.db('tours').collection("users")
-function sendEmail(bookings){
- const {email} = bookings
 
-let transporter = nodemailer.createTransport({
-   host: 'smtp.sendgrid.net',
-   port: 587,
-   auth: {
-       user: "apikey",
-       pass: process.env.SendGrid_api_key
-   }
-})
 
-transporter.sendMail({
-  from: "jobaersiddique@gmail.com", // verified sender email
-  to: 'jobaerit.studio@gmail.com', // recipient email
-  subject: "Test message subject", // Subject line
-  text: "Hello world!", // plain text body
-  html: "<b>Hello world!</b>", // html body
-}, function(error, info){
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('Email sent: ' + info.response);
-  }
-});
-}
+
 async function run() {
     try {
       
