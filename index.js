@@ -29,7 +29,7 @@ const port = process.env.PORT||5000
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cjwnnop.mongodb.net/?retryWrites=true&w=majority`;
 // console.log(uri)
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const offerCollection= client.db('tours').collection("offerInfo")
 const bookingsCollection = client.db('tours').collection("bookings")
 const paymentCollecetion =client.db('tours').collection("payment")
